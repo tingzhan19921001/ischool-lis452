@@ -12,8 +12,10 @@ import lxml.html
 import operator # to sort by keys
 
 def retrieve_news():
+    
     f = open('news.txt','w',encoding='UTF8')
     
+    # to give the news link 
     url = input('Give me the news and let me summarize for you:')
     
     # Fetch the url web page, and convert the response into an HTML document tree:
@@ -43,6 +45,7 @@ def retrieve_news():
     
     
 retrieve_news()
+# by far, a text file name 'news.txt' which contains the news  has been created. Save it for future use
 
 
 stopwords = set(stopwords.words('english')+list(punctuation))
@@ -58,16 +61,17 @@ def byFreq(pair):
 def main():
     
     #raw_text = open('news.txt' ,'r',encoding='ISO-8859-1').read()
+    # news.txt is what the retrieve_new() create
     raw_text = open('news.txt' ,'r',encoding='UTF8').read()
     text = raw_text.lower() #to make all the words in files lowerclass
     #for ch in '!"\'#$%&()\'*+,-./:;<=>?@[\\]^_`{|}~': # to get rid of punctuations
         #text = text.replace(ch, ' ') #we already have stopwords which include punctuations
     words = text.split()
-    print('Originally there are {} words in the text'.format(len(words)))
+    print('Originally there are {} words in the text.\n'.format(len(words)))
     # to remove the stopwords and thereby create a new list that contain all the words from the text except stopwords
     new_list=[x for x in words if x not in stopwords]
 
-    print('After removing stopwords,{} words are left'.format(len(new_list)))
+    print('After removing stopwords,{} words are left.\n'.format(len(new_list)))
 
 
 
@@ -84,7 +88,7 @@ def main():
     items.sort(key = byFreq, reverse = True)
     #print(items[:5])
 
-    print('There are {} distinct words'.format(len(items)))
+    print('There are {} distinct words.\n'.format(len(items)))
     # to see how many distinct words in the text given
     distinct_words = int(len(items))
     
@@ -106,7 +110,7 @@ def main():
     # to change it into a dictionary
     dict_of_word_value = dict(list_word_value)
     #print(dict_of_word_value.get('first'))
-    print('There are {} sentences in this news!'.format(len(sentences)))
+    print('There are {} sentences in this news!\n'.format(len(sentences)))
     #single_sentence_value = []
     
     # build up a new dictionary whose key is the sentence itself and whose value is the sentence value.
@@ -132,7 +136,8 @@ def main():
     sentence_items = dict_sentence.items()
     #sentence_items.sort()
     
-    # to sort by key, the key is each sentence value
+    # operator.itemgetter(0) to get key and then to sort by key, the key is each sentence value
+    # operator.itemgetter(1) is to get value
     sorted_sentence_items = sorted(dict_sentence.items(), key=operator.itemgetter(0),reverse=True)
     #print(type(sentence_items))
     #print(type(sorted_sentence_items))
@@ -145,6 +150,7 @@ def main():
         if (i % 10) == 0:
             #print(a)
             print(sorted_sentence_items[a][1])
+            # increase by one unit each time
             a += 1
     #print(sorted_sentence_items[2][1])
     
