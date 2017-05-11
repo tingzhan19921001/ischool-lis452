@@ -1,6 +1,9 @@
 # Github link: https://github.com/tingzhan19921001/ischool-lis452/blob/master/Ting_Zhan_LIS452.py
 # suggested news link to test: http://www.chinadaily.com.cn/business/2017-05/11/content_29300055.htm
 # suggested news link to test: http://www.chinadaily.com.cn/business/tech/2017-05/11/content_29303225.htm
+# suggested news link to test: http://www.chinadaily.com.cn/business/2017-05/11/content_29296091.htm
+# please copy the any of the links above and give it to the tool.
+# The results in the screenshot illustrated in the report comes out of the third link, just for your information.
 
 
 from nltk.tokenize import sent_tokenize, word_tokenize
