@@ -64,6 +64,7 @@ def main():
         #text = text.replace(ch, ' ') #we already have stopwords which include punctuations
     words = text.split()
     print('Originally there are {} words in the text'.format(len(words)))
+    # to remove the stopwords and thereby create a new list that contain all the words from the text except stopwords
     new_list=[x for x in words if x not in stopwords]
 
     print('After removing stopwords,{} words are left'.format(len(new_list)))
@@ -74,14 +75,17 @@ def main():
     #print(new_list)
 
     for w in new_list:
+        # each time add 1 more
         counts[w] += 1
-
+    # items is a list,each item contains the word itself and the frequency of that word 
     items = list(counts.items())
+    #print(items)
     #items.sort()
     items.sort(key = byFreq, reverse = True)
     #print(items[:5])
 
     print('There are {} distinct words'.format(len(items)))
+    # to see how many distinct words in the text given
     distinct_words = int(len(items))
     
     #tokenize the sentence
@@ -96,7 +100,7 @@ def main():
         single_word, frequency = items[i]
         # to give an equation to calculate the word's importance, so that we could rank the word's value
         single_word, important_value = items[i][0], frequency/len(new_list)
-        # to build up a new list that contain the word and it value
+        # to build up a new list that contain the word and its importance value
         list_word_value.append((single_word,important_value))
     
     # to change it into a dictionary
