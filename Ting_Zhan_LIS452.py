@@ -5,29 +5,34 @@ from collections import defaultdict
 from string import punctuation
 import re
 import lxml.html
+import operator # to sort by keys
 
 def retrieve_news():
     f = open('news.txt','w',encoding='UTF8')
     
-    # In the search URL below, the 'mh' key says how many results to return per page. Default is 100.
     url = input('Give me the news and let me summarize for you:')
     
     # Fetch the url web page, and convert the response into an HTML document tree:
     tree = lxml.html.parse(url)
     
+    # to get the news title
     title = tree.xpath('//title/text()')
-    print('Page title: ', title[0])
+    print('News title: ', title[0])
     
+    # to get the news body
     body = tree.xpath('//p/text()')
-    print(len(body))
+    #print(len(body))
     #body = body.split()
     
+    #to change the body news into a form of string
     str_body = ''.join(body)
     
     #print(type(str_body))
     #str_body = ''.join(str(e) for e in body)
     byte_body = str_body.encode('UTF8')
+    # encode, decoode method to solve the unicodeerror
     new_body = byte_body.decode(encoding='UTF-8')
+    #write the body into the file for future use
     f.write(new_body)
     
     f.close()
@@ -46,7 +51,7 @@ stopwords = set(stopwords.words('english')+list(punctuation))
 def byFreq(pair):
     return pair[1]  # to return the tuple with the position index = 1
 
-def word_score():
+def main():
     
     #raw_text = open('news.txt' ,'r',encoding='ISO-8859-1').read()
     raw_text = open('news.txt' ,'r',encoding='UTF8').read()
@@ -74,39 +79,66 @@ def word_score():
 
     print('There are {} distinct words'.format(len(items)))
     distinct_words = int(len(items))
-
+    
+    #tokenize the sentence
     sentences = sent_tokenize(raw_text)
     #print(len(sentences))
-
+    
+    #tokenize the words in one sentence
     word_in_sentence =[word_tokenize(s) for s in sentences]
 
     list_word_value=[]
     for i in range(len(items)):
         single_word, frequency = items[i]
+        # to give an equation to calculate the word's importance, so that we could rank the word's value
         single_word, important_value = items[i][0], frequency/len(new_list)
+        # to build up a new list that contain the word and it value
         list_word_value.append((single_word,important_value))
-
+    
+    # to change it into a dictionary
     dict_of_word_value = dict(list_word_value)
     #print(dict_of_word_value.get('first'))
-
-    single_sentence_value = []
+    print('There are {} sentences in this news!'.format(len(sentences)))
+    #single_sentence_value = []
+    
+    # build up a new dictionary whose key is the sentence itself and whose value is the sentence value.
     dict_sentence = {}
     for i in range(len(sentences)):
         sentences_value = 0
+        # from here, we start calculating the sentence value by adding every single word's value
         for word in word_in_sentence[i]:
             if word.lower() in new_list:
                 word=word.lower()
+                # add each word's value together
                 sentences_value = float(sentences_value) + dict_of_word_value.get(word)
         # multiple the real value by 10000 for future calculation
                 #calculation of sentence value is wrong, reconsider it.
         #print(sentences[i],'\n',sentences_value/items[i][1]*10000)
         #print(i,sentences[i])
-        dict_sentence.update({sentence : sentences[i]}) #to append each sentence with it value, making them a dictionary
         
-    print(dict_sentence[0])
+        #to append the sentence: sentence_value to the dictionary
+        dict_sentence.update({sentences_value : sentences[i]}) #to append each sentence with it value, making them a dictionary
         
-    #if len(sentences)
-
-
-
-word_score()
+    #print(dict_sentence)
+    
+    sentence_items = dict_sentence.items()
+    #sentence_items.sort()
+    
+    # to sort by key, the key is each sentence value
+    sorted_sentence_items = sorted(dict_sentence.items(), key=operator.itemgetter(0),reverse=True)
+    #print(type(sentence_items))
+    #print(type(sorted_sentence_items))
+    
+    #print(sentence_items.get())
+    a = 0
+    print('News abstract:')
+    for i in range(len(sentences)):
+        # every 10 sentence more, add one more sentence to the abstract
+        if (i % 10) == 0:
+            #print(a)
+            print(sorted_sentence_items[a][1])
+            a += 1
+    #print(sorted_sentence_items[2][1])
+    
+if __name__ == '__main__':
+    main()
