@@ -24,7 +24,7 @@ def retrieve_news():
     
     str_body = ''.join(body)
     
-    print(type(str_body))
+    #print(type(str_body))
     #str_body = ''.join(str(e) for e in body)
     byte_body = str_body.encode('UTF8')
     new_body = byte_body.decode(encoding='UTF-8')
@@ -45,8 +45,6 @@ stopwords = set(stopwords.words('english')+list(punctuation))
 
 def byFreq(pair):
     return pair[1]  # to return the tuple with the position index = 1
-
-
 
 def word_score():
     
@@ -78,7 +76,7 @@ def word_score():
     distinct_words = int(len(items))
 
     sentences = sent_tokenize(raw_text)
-    print(len(sentences))
+    #print(len(sentences))
 
     word_in_sentence =[word_tokenize(s) for s in sentences]
 
@@ -90,12 +88,9 @@ def word_score():
 
     dict_of_word_value = dict(list_word_value)
     #print(dict_of_word_value.get('first'))
-    #print(dict_of_word_value)
-
-
-
 
     single_sentence_value = []
+    dict_sentence = {}
     for i in range(len(sentences)):
         sentences_value = 0
         for word in word_in_sentence[i]:
@@ -105,7 +100,12 @@ def word_score():
         # multiple the real value by 10000 for future calculation
                 #calculation of sentence value is wrong, reconsider it.
         #print(sentences[i],'\n',sentences_value/items[i][1]*10000)
-        print(i,sentences[i])
+        #print(i,sentences[i])
+        dict_sentence.update({sentence : sentences[i]}) #to append each sentence with it value, making them a dictionary
+        
+    print(dict_sentence[0])
+        
+    #if len(sentences)
 
 
 
